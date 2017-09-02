@@ -8,5 +8,9 @@
   },
   "repository": "https://github.com/RumbleFrog/Instagram-Meme-Bot.git",
   "author": "RumbleFrog <admin@biturl.io>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "instagram-private-api": "^0.6.6",
+    "request": "^2.81.0"
+  }
 }
