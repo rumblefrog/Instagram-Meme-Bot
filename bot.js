@@ -2,6 +2,7 @@ const config = require('./config.json');
 const fs = require('fs');
 const request = require('request');
 const log = require('winston');
+const temp = require('temp').track();
 const Client = require('instagram-private-api').V1;
 const device = new Client.Device(config.credentials.username);
 const storage = new Client.CookieFileStorage(`${config.settings.storage}${config.credentials.username}.json`);
@@ -24,8 +25,25 @@ log.add(log.transports.File, {
     timestamp: true
 });
 
-
-//const Session = Client.Session.create(device, storage, config.credentials.username, config.credentials.password);
+Client.Session.create(device, storage, config.credentials.username, config.credentials.password)
+    .then((session) => {
+        getReddit((err, result) => {
+            if (!err) {
+                let stream = temp.createWriteStream({prefix:'image',suffix:'.jpg'});
+                request(result.data.url).pipe(stream).on('close', () => {
+                    stream.end();
+                    Client.Upload.photo(session, stream.path)
+                        .then((upload) => {
+                            console.log(upload.params.uploadId);
+                            return Client.Media.configurePhoto(session, upload.params.uploadId, result.data.title);
+                        })
+                        .then((medium) => {
+                            console.log(medium.params)
+                        })
+                });
+            }
+        });
+    })
 
 function getReddit(callback) {
     request('https://www.reddit.com/r/dankmemes/.json', (err, res, body) => {
@@ -56,7 +74,7 @@ function getReddit(callback) {
                     log.error('Failed to write to cache: ' + err);
                     return callback(false);
                 }
-                return callback(null, UI.data.url);
+                return callback(null, UI);
             });
         } else {
             fs.writeFile(config.settings.storage + config.settings.caches.reddit, JSON.stringify([AP[0].data.id]), (err) => {
@@ -64,12 +82,8 @@ function getReddit(callback) {
                     log.error('Failed to write to cache: ' + err);
                     return callback(false);
                 }
-                return callback(null, AP[0].data.id);
+                return callback(null, AP[0]);
             });
         }
     });
 }
-
-getReddit((err, result) => {
-    console.log(result);
-});
