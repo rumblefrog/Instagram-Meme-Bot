@@ -27,71 +27,50 @@ log.add(log.transports.File, {
 
 //const Session = Client.Session.create(device, storage, config.credentials.username, config.credentials.password);
 
-function getReddit() {
-    // request('https://www.reddit.com/r/dankmemes/.json', (err, res, body) => {
-    //     if (res.statusCode != 200) {
-    //         log.error('Failed to fetch Reddit posts: ' + res.statusCode);
-    //         return;
-    //     }
-
-        body = fs.readFileSync('temp.json');
+function getReddit(callback) {
+    request('https://www.reddit.com/r/dankmemes/.json', (err, res, body) => {
+        if (res.statusCode != 200)
+            return callback('HTTP Code: ' + res.statusCode);
 
         const Posts = JSON.parse(body).data.children;
 
-        const AP = Object.filter(Posts, post => !post.data.stickied);
+        const AP = [];
 
-        console.log(getUniqueItem('reddit.json', AP, 'id'));
-    //});
-}
+        Object.keys(Posts).forEach((i) => {
+            if (!Posts[i].data.stickied) AP.push(Posts[i]);
+        });
 
-function getUniqueItem(cache, items, prop) {
-    if (!cache || !items || !prop) {
-        log.error('UI missing param');
-        return false;
-    }
+        if (fs.existsSync(config.settings.storage + config.settings.caches.reddit)) {
+            let content = JSON.parse(fs.readFileSync(config.settings.storage + config.settings.caches.reddit));
 
-    if (fs.existsSync(config.settings.storage + cache)) {
-
-        fs.readFile(config.settings.storage + cache, (err, data) => {
-            if (err) {
-                log.error('Failed to read ' + cache, err);
-                return false;
-            }
-
-            let content = JSON.parse(data);
-
-            let UI = items.find((item) => {
-                return !content.includes(item[prop]);
+            let UI = AP.find((item) => {
+                return !content.includes(item.data.id);
             });
 
-            if (!UI) return false;
+            if (!UI) return callback(false);
 
-            content.push(UI);
+            content.push(UI.data.id);
 
-            fs.writeFile(config.settings.storage + cache, JSON.stringify(content), (err) => {
+            fs.writeFile(config.settings.storage + config.settings.caches.reddit, JSON.stringify(content), (err) => {
                 if (err) {
-                    log.error('Failed to write to ' + cache, err);
-                    return false;
+                    log.error('Failed to write to cache: ' + err);
+                    return callback(false);
                 }
-                return UI;
+                return callback(null, UI.data.url);
             });
-        });
-    } else {
-        let item = items[Math.floor(Math.random()*Object.keys(items).length)];
-
-        fs.writeFile(config.settings.storage + cache, JSON.stringify([item[prop]]), (err) => {
-            if (err) {
-                log.error('Failed to write to ' + cache, err);
-                return false;
-            }
-            return item;
-        });
-    }
+        } else {
+            return 'test';
+            fs.writeFile(config.settings.storage + config.settings.caches.reddit, JSON.stringify([AP[0].data.id]), (err) => {
+                if (err) {
+                    log.error('Failed to write to cache: ' + err);
+                    return callback(false);
+                }
+                return callback(null, AP[0].data.id);
+            });
+        }
+    });
 }
 
-Object.filter = (obj, predicate) =>
-    Object.keys(obj)
-          .filter( key => predicate(obj[key]) )
-          .reduce( (res, key) => (res[key] = obj[key], res), {} );
-
-getReddit();
+getReddit((err, result) => {
+    console.log(result);
+});
