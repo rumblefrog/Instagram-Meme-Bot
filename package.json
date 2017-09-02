@@ -1,0 +1,12 @@
+{
+  "name": "Instagram-Meme-Bot",
+  "version": "0.0.1",
+  "description": "Instagram Meme bot",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "repository": "https://github.com/RumbleFrog/Instagram-Meme-Bot.git",
+  "author": "RumbleFrog <admin@biturl.io>",
+  "license": "MIT"
+}
