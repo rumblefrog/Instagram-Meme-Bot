@@ -59,10 +59,6 @@ function getReddit(callback) {
                 return callback(null, UI.data.url);
             });
         } else {
-<<<<<<< HEAD
-=======
-            return 'test';
->>>>>>> fe1511366aaafbdbe7cd32101beb80b3806e25b7
             fs.writeFile(config.settings.storage + config.settings.caches.reddit, JSON.stringify([AP[0].data.id]), (err) => {
                 if (err) {
                     log.error('Failed to write to cache: ' + err);
