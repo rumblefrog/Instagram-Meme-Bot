@@ -3,6 +3,7 @@ const fs = require('fs');
 const request = require('request');
 const log = require('winston');
 const temp = require('temp').track();
+const scrapeIt = require("scrape-it");
 const Client = require('instagram-private-api').V1;
 const device = new Client.Device(config.credentials.username);
 const storage = new Client.CookieFileStorage(`${config.settings.storage}${config.credentials.username}.json`);
@@ -25,25 +26,25 @@ log.add(log.transports.File, {
     timestamp: true
 });
 
-Client.Session.create(device, storage, config.credentials.username, config.credentials.password)
-    .then((session) => {
-        getReddit((err, result) => {
-            if (!err) {
-                let stream = temp.createWriteStream({prefix:'image',suffix:'.jpg'});
-                request(result.data.url).pipe(stream).on('close', () => {
-                    stream.end();
-                    Client.Upload.photo(session, stream.path)
-                        .then((upload) => {
-                            console.log(upload.params.uploadId);
-                            return Client.Media.configurePhoto(session, upload.params.uploadId, result.data.title);
-                        })
-                        .then((medium) => {
-                            console.log(medium.params)
-                        })
-                });
-            }
-        });
-    })
+// Client.Session.create(device, storage, config.credentials.username, config.credentials.password)
+//     .then((session) => {
+//         getReddit((err, result) => {
+//             if (!err) {
+//                 let stream = temp.createWriteStream({prefix:'image',suffix:'.jpg'});
+//                 request(result.data.url).pipe(stream).on('close', () => {
+//                     stream.end();
+//                     Client.Upload.photo(session, stream.path)
+//                         .then((upload) => {
+//                             console.log(upload.params.uploadId);
+//                             return Client.Media.configurePhoto(session, upload.params.uploadId, result.data.title);
+//                         })
+//                         .then((medium) => {
+//                             console.log(medium.params)
+//                         })
+//                 });
+//             }
+//         });
+//     })
 
 function getReddit(callback) {
     request('https://www.reddit.com/r/dankmemes/.json', (err, res, body) => {
@@ -87,3 +88,44 @@ function getReddit(callback) {
         }
     });
 }
+
+function getiFunny(callback) {
+    scrapeIt({
+        url: 'https://ifunny.co/RumbleFrog',
+        headers: {
+            Cookie: 'mode=list'
+        }
+    }, {
+        memes: {
+            listItem: 'li .post',
+            data: {
+                type: {
+                    selector: '.js-media',
+                    attr: 'data-source',
+                    convert: src => (src) ? 'video' : 'image'
+                },
+                image: {
+                    selector: '.media__image',
+                    attr: 'src'
+                },
+                video: {
+                    selector: '.js-media',
+                    attr: 'data-source'
+                },
+                tags: {
+                    listItem: '.tagpanel > .tagpanel__item > a'
+                },
+                raw_meta_data: {
+                    selector: '.post__toolbar .js-dwhcollector-action',
+                    attr: 'data-dwhevent-props'
+                }
+            }
+        }
+    })
+    .then(page => callback(null, page.memes))
+    .catch(err => callback(err));
+}
+
+getiFunny((err, lul) => {
+    console.log(lul);
+});

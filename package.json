@@ -12,6 +12,7 @@
   "dependencies": {
     "instagram-private-api": "^0.6.6",
     "request": "^2.81.0",
+    "scrape-it": "^3.3.2",
     "temp": "^0.8.3",
     "winston": "^2.3.1"
   }

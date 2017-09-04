@@ -1,0 +1,103 @@
+{
+    "memes": [
+        {
+            "type": "image",
+            "image": "https://img.ifcdn.com/images/b4a6451740343317b45d56d8ac3d463154e9320fa761e9c80469bc472dfe460a_1.jpg",
+            "tags": []
+        },
+        {
+            "type": "image",
+            "image": "https://img.ifcdn.com/images/025dec15bf8c2f1be75fb91e29d2fef6401ce1e9b460e7f53f97d263538f584b_1.jpg",
+            "tags": [
+                "#AlternateFeatures",
+                "#reviewbrah",
+                "#backtoschool",
+                "#dank",
+                "#ifunncleanup"
+            ]
+        },
+        {
+            "type": "image",
+            "image": "https://img.ifcdn.com/images/0fa8b50056e26bafd3008817bc5ac804308fba86d0efda96362c03c408235522_1.jpg",
+            "tags": [
+                "#ifunnyoriginal",
+                "#ifunncleanup",
+                "#Feature",
+                "#thenew10",
+                "#AlternateFeatures"
+            ]
+        },
+        {
+            "type": "image",
+            "image": "https://img.ifcdn.com/images/343d1fe1b604834eedb045a41fcf6677faeca11ac3e89e678b2df42fdfdd443e_1.jpg",
+            "tags": [
+                "#Funny",
+                "#10at10",
+                "#Feature",
+                "#DunderMifflinScranton",
+                "#AlternateFeatures"
+            ]
+        },
+        {
+            "type": "video",
+            "image": "https://imageproxy.ifcdn.com/noop/images/74190e0109596572a3e7354774ee131611dd8cb375e8d75239f895526f12f911_3.jpg",
+            "video": "https://img.ifcdn.com/videos/74190e0109596572a3e7354774ee131611dd8cb375e8d75239f895526f12f911_1.mp4",
+            "tags": [
+                "#AlternateFeatures"
+            ]
+        },
+        {
+            "type": "image",
+            "image": "https://img.ifcdn.com/images/3164ff9f8897e704023e4abe94889dce4a61594d937e2987cbec2753fc9d3e16_1.jpg",
+            "tags": [
+                "#relatable",
+                "#textpost",
+                "#ifunnytop",
+                "#AlternateFeatures",
+                "#Feature"
+            ]
+        },
+        {
+            "type": "image",
+            "image": "https://img.ifcdn.com/images/a6a95c1c3ccabdbea3522a7f2264d02489b8ee690e6c9f87fa9ab6b5f2290e1b_1.jpg",
+            "tags": [
+                "#10at10",
+                "#AlternateFeatures",
+                "#ifunny",
+                "#feature",
+                "#lol"
+            ]
+        },
+        {
+            "type": "image",
+            "image": "https://img.ifcdn.com/images/9a34c5c722309c26c2abcdeb8b0f12016f1a6e274a4e797d6238544444bc595a_1.jpg",
+            "tags": [
+                "#AlternateFeatures",
+                "#ifunncleanup",
+                "#ifunnytop"
+            ]
+        },
+        {
+            "type": "image",
+            "image": "https://img.ifcdn.com/images/730cdbe4a93d57a190cbdbe6715dcc6f153d0aa284c1f3bc76739c1247bfc6b0_1.jpg",
+            "tags": [
+                "#alternatefeatures",
+                "#ifunnytop",
+                "#ifunncleanup",
+                "#10at10",
+                "#feature"
+            ]
+        },
+        {
+            "type": "image",
+            "image": "https://img.ifcdn.com/images/8787cc296241048b63489717960b07d00350cf49db9711f527a31300416e3432_1.jpg",
+            "tags": [
+                "#feature",
+                "#ifunncleanup",
+                "#AlternateFeatures",
+                "#10at10",
+                "#iFunnyTOP"
+            ]
+        }
+    ]
+}
