@@ -11,6 +11,8 @@ const Client = require('instagram-private-api').V1;
 const device = new Client.Device(config.credentials.username);
 const storage = new Client.CookieFileStorage(`${config.settings.storage}${config.credentials.username}.json`);
 
+const IG
+
 log.addColors({error:"red",warning:"yellow",info:"green",verbose:"white",debug:"blue",silly:"gray"});
 
 log.remove(log.transports.Console);
@@ -28,6 +30,12 @@ log.add(log.transports.File, {
     filename: config.settings.storage + config.credentials.username + '.log',
     timestamp: true
 });
+
+if (fs.fileExistsSync(`${config.settings.storage}${config.credentials.username}.json`))
+    IG = new Client.Session(storage, device);
+else
+    Client.Session.create(device, storage, config.credentials.username, config.credentials.password)
+        .then(session => IG = session);
 
 // Client.Session.create(device, storage, config.credentials.username, config.credentials.password)
 //     .then((session) => {
