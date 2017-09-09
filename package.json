@@ -10,6 +10,7 @@
   "author": "RumbleFrog <admin@biturl.io>",
   "license": "MIT",
   "dependencies": {
+    "fluent-ffmpeg": "^2.1.2",
     "instagram-private-api": "^0.6.6",
     "node-schedule": "^1.2.4",
     "request": "^2.81.0",
