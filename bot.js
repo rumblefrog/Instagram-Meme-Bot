@@ -4,6 +4,7 @@ const request = require('request');
 const log = require('winston');
 const temp = require('temp').track();
 const Modules = require ('./lib/Modules');
+const schedule = require('node-schedule');
 const Client = require('instagram-private-api').V1;
 const device = new Client.Device(config.credentials.username);
 const storage = new Client.CookieFileStorage(`${config.settings.storage}${config.credentials.username}.json`);
@@ -49,6 +50,16 @@ log.add(log.transports.File, {
 // var IG;
 //
 // Client.Session.create(device, storage, config.credentials.username, config.credentials.password)
-//     .then(session => IG = session);
+//     .then((session) => {
+//         session.getAccount()
+//             .then(account => log.info(`Successfully logged in as ${account.params.username}`));
 //
-// console.log(IG);
+//         IG = session;
+//
+//         schedule.scheduleJob('* * * * * *', hello);
+//     });
+
+var kek = new Modules.Cache('asd');
+console.log(kek.exists());
+
+//console.log(kek);
