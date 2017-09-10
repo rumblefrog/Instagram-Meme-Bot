@@ -41,7 +41,9 @@ Client.Session.create(device, storage, config.credentials.username, config.crede
 
         log.info('Scheduled jobs for uploads');
         schedule.scheduleJob('0 13 * * *', uploadIF);
+        schedule.scheduleJob('30 14 * * *', uploadIF);
         schedule.scheduleJob('0 16 * * *', uploadIF);
+        schedule.scheduleJob('30 17 * * *', uploadIF);
         schedule.scheduleJob('0 19 * * *', uploadIF);
     });
 
