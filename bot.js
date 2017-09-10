@@ -59,8 +59,9 @@ Client.Session.create(device, storage, config.credentials.username, config.crede
 
         IG = session;
 
-        //schedule.scheduleJob('* * * * * *', hello);
-        setTimeout(uploadIF, 1000);
+        schedule.scheduleJob('0 13 * * *', uploadIF);
+        schedule.scheduleJob('0 16 * * *', uploadIF);
+        schedule.scheduleJob('0 19 * * *', uploadIF);
     });
 
 function uploadIF() {
