@@ -5,6 +5,7 @@ const log = require('winston');
 const temp = require('temp').track();
 const ffmpeg = require('fluent-ffmpeg');
 const getDuration = require('get-video-duration');
+const sharp = require('sharp');
 const Modules = require ('./lib/Modules');
 const schedule = require('node-schedule');
 const Client = require('instagram-private-api').V1;
@@ -73,10 +74,6 @@ function uploadIF() {
 
             if (!IF_Cache.existsSync(meta.contentId)) {
 
-                // console.log(Modules.IF.filterTags(memes[i].tags).join(' '));
-                //
-                // return;
-
                 IF_Cache.push(meta.contentId, (err) => {
                     if (err) return;
 
@@ -88,14 +85,26 @@ function uploadIF() {
 
                     request(dl_src).pipe(stream).on('close', () => {
                         stream.end();
-
                         let final_type = (meta.contentType == 'pic') ? 'image' : 'video';
 
                         if (final_type == 'image') {
-                            Client.Upload.photo(IG, stream.path)
-                                .then((upload) => {
-                                    Client.Media.configurePhoto(IG, upload.params.uploadId, Modules.IF.filterTags(memes[i].tags, config.credentials.username).join(' '));
-                                });
+                            let cropped = temp.createWriteStream({prefix:'ifunny',suffix:'.jpg'});
+                            const image = sharp(fs.readFileSync(stream.path));
+                            image
+                                .metadata()
+                                .then((metadata) => {
+                                    return image
+                                        .resize(metadata.width, metadata.height - 20)
+                                        .crop(sharp.gravity.north)
+                                        .toFile(cropped.path)
+                                })
+                                .then((data) => {
+                                    cropped.end();
+                                    Client.Upload.photo(IG, cropped.path)
+                                        .then((upload) => {
+                                            Client.Media.configurePhoto(IG, upload.params.uploadId, Modules.IF.generateCaption(memes[i].tags, config.credentials.username));
+                                        })
+                                })
                         } else {
                             if (dl_ext == '.gif') {
                                 let convert = temp.createWriteStream({prefix:'ifunny',suffix:'.mp4'});
@@ -114,7 +123,7 @@ function uploadIF() {
 
                                                 Client.Upload.video(IG, convert.path, thumbnail.path)
                                                     .then((upload) => {
-                                                        Client.Media.configureVideo(IG, upload.uploadId, Modules.IF.filterTags(memes[i].tags, config.credentials.username).join(' '), data.duration);
+                                                        Client.Media.configureVideo(IG, upload.uploadId, Modules.IF.generateCaption(memes[i].tags, config.credentials.username), data.duration);
                                                     });
                                             })
                                     })
@@ -126,7 +135,7 @@ function uploadIF() {
                                     getDuration(stream.path).then((duration) => {
                                         Client.Upload.video(IG, stream.path, thumbnail.path)
                                             .then((upload) => {
-                                                Client.Media.configureVideo(IG, upload.uploadId, Modules.IF.filterTags(memes[i].tags, config.credentials.username).join(' '), duration);
+                                                Client.Media.configureVideo(IG, upload.uploadId, Modules.IF.generateCaption(memes[i].tags, config.credentials.username), duration);
                                             });
                                     });
                                 });
