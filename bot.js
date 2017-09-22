@@ -92,7 +92,10 @@ function uploadIF() {
                                     log.debug('Uploading');
                                     Client.Upload.photo(IG, cropped.path)
                                         .then((upload) => {
-                                            Client.Media.configurePhoto(IG, upload.params.uploadId, Modules.IF.generateCaption(memes[i].tags, config.credentials.username));
+                                            return Client.Media.configurePhoto(IG, upload.params.uploadId, `Follow @${config.credentials.username} for more contents`);
+                                        })
+                                        .then((medium) => {
+                                          Client.Comment.create(IG, medium.params.id, Modules.IF.generateTags(memes[i].tags, config.credentials.username));
                                         })
                                 })
                         } else {
@@ -115,8 +118,11 @@ function uploadIF() {
                                                 log.debug('Uploading');
                                                 Client.Upload.video(IG, convert.path, thumbnail.path)
                                                     .then((upload) => {
-                                                        Client.Media.configureVideo(IG, upload.uploadId, Modules.IF.generateCaption(memes[i].tags, config.credentials.username), data.duration);
-                                                    });
+                                                        return Client.Media.configureVideo(IG, upload.uploadId, `Follow @${config.credentials.username} for more contents`, data.duration);
+                                                    })
+                                                    .then((medium) => {
+                                                      Client.Comment.create(IG, medium.params.id, Modules.IF.generateTags(memes[i].tags, config.credentials.username));
+                                                    })
                                             })
                                     })
                             } else {
@@ -129,8 +135,11 @@ function uploadIF() {
                                         log.debug('Uploading');
                                         Client.Upload.video(IG, stream.path, thumbnail.path)
                                             .then((upload) => {
-                                                Client.Media.configureVideo(IG, upload.uploadId, Modules.IF.generateCaption(memes[i].tags, config.credentials.username), duration);
-                                            });
+                                                return Client.Media.configureVideo(IG, upload.uploadId, `Follow @${config.credentials.username} for more contents`, duration);
+                                            })
+                                            .then((medium) => {
+                                              Client.Comment.create(IG, medium.params.id, Modules.IF.generateTags(memes[i].tags, config.credentials.username));
+                                            })
                                     });
                                 });
                             }
