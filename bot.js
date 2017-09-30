@@ -48,7 +48,7 @@ Client.Session.create(device, storage, config.credentials.username, config.crede
     });
 
 function uploadIF() {
-    Modules.IF.getMemes((err, memes) => {
+    Modules.IF.getMemesFromProfile('rumblefrog', (err, memes) => {
         if (err) return;
 
         let IF_Cache = new Modules.Cache(config.settings.storage + config.settings.caches.ifunny);
