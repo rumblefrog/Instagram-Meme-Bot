@@ -1,4 +1,5 @@
 const config = require('./config.json');
+const Raven = require('raven');
 const fs = require('fs');
 const request = require('request');
 const log = require('winston');
@@ -11,6 +12,8 @@ const schedule = require('node-schedule');
 const Client = require('instagram-private-api').V1;
 const device = new Client.Device(config.credentials.username);
 const storage = new Client.CookieFileStorage(`${config.settings.storage}${config.credentials.username}.json`);
+
+Raven.config(config.settings.raven).install();
 
 log.addColors({error:"red",warning:"yellow",info:"green",verbose:"white",debug:"blue",silly:"gray"});
 

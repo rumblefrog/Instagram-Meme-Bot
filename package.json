@@ -14,6 +14,7 @@
     "get-video-duration": "^0.2.0",
     "instagram-private-api": "^0.6.6",
     "node-schedule": "^1.2.4",
+    "raven": "^2.2.1",
     "request": "^2.81.0",
     "scrape-it": "^3.3.2",
     "sharp": "^0.18.2",
